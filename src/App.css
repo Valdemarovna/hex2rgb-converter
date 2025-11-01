@@ -38,6 +38,7 @@
   text-align: center;
   letter-spacing: 1px;
   font-weight: 600;
+  font-family: 'Courier New', monospace;
 }
 
 .hex-input:focus {

@@ -19,56 +19,49 @@ function App() {
       return
     }
 
-    // Если введен #, но нет других символов
+    // Если введен только #
     if (value === '#') {
-      setRgbColor('rgb(0, 0, 0)')
+      setRgbColor('Введите полный HEX...')
       setBackgroundColor('#000000')
       setIsError(false)
       return
     }
 
-    // Проверяем валидность HEX цвета
-    if (isValidHex(value)) {
-      const rgb = hexToRgb(value)
-      if (rgb) {
-        setRgbColor(`rgb(${rgb.r}, ${rgb.g}, ${rgb.b})`)
-        setBackgroundColor(value)
-        setIsError(false)
+    // Если меньше 7 символов - показываем промежуточный результат
+    if (value.length < 7) {
+      setRgbColor('Введите полный HEX...')
+      setBackgroundColor('#000000')
+      setIsError(false)
+      return
+    }
+
+    // Если ровно 7 символов - проверяем валидность
+    if (value.length === 7) {
+      // Проверяем начинается ли с # и содержит 6 hex-символов
+      if (/^#[0-9A-Fa-f]{6}$/.test(value)) {
+        const rgb = hexToRgb(value)
+        if (rgb) {
+          setRgbColor(`rgb(${rgb.r}, ${rgb.g}, ${rgb.b})`)
+          setBackgroundColor(value)
+          setIsError(false)
+        } else {
+          showError()
+        }
       } else {
-        setRgbColor('Ошибка!')
-        setBackgroundColor('#ff0000')
-        setIsError(true)
+        showError()
       }
-    } else {
-      setRgbColor('Ошибка!')
-      setBackgroundColor('#ff0000')
-      setIsError(true)
     }
   }
 
-  const isValidHex = (hex) => {
-    // Проверяем форматы: #rgb, #rgba, #rrggbb, #rrggbbaa
-    return /^#?([A-Fa-f0-9]{3,4}|[A-Fa-f0-9]{6}|[A-Fa-f0-9]{8})$/.test(hex)
+  const showError = () => {
+    setRgbColor('Ошибка!')
+    setBackgroundColor('#ff0000')
+    setIsError(true)
   }
 
   const hexToRgb = (hex) => {
     // Убираем # из начала
-    let cleanHex = hex.replace('#', '')
-    
-    // Если короткий формат (3 символа), расширяем его
-    if (cleanHex.length === 3) {
-      cleanHex = cleanHex.split('').map(char => char + char).join('')
-    }
-    
-    // Если 4 символа (RGBA), берем только RGB
-    if (cleanHex.length === 4) {
-      cleanHex = cleanHex.substring(0, 3).split('').map(char => char + char).join('')
-    }
-    
-    // Если 8 символов (RRGGBBAA), берем только RRGGBB
-    if (cleanHex.length === 8) {
-      cleanHex = cleanHex.substring(0, 6)
-    }
+    const cleanHex = hex.replace('#', '')
 
     // Преобразуем HEX в RGB
     const r = parseInt(cleanHex.substring(0, 2), 16)
@@ -95,7 +88,8 @@ function App() {
             className={`hex-input ${isError ? 'error' : ''}`}
             value={hexColor}
             onChange={handleHexChange}
-            placeholder="Введите HEX"
+            maxLength={7}
+            placeholder="#000000"
           />
         </div>
         <div className="result-section">
