@@ -45,6 +45,11 @@
   box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.1);
 }
 
+.hex-input.error {
+  border-color: #dc3545;
+  box-shadow: 0 0 0 3px rgba(220, 53, 69, 0.1);
+}
+
 .hex-input::placeholder {
   color: #6c757d;
   font-weight: normal;
@@ -69,6 +74,12 @@
   transition: all 0.3s ease;
 }
 
+.rgb-output.error {
+  border-color: #dc3545;
+  color: #dc3545;
+  background: #f8d7da;
+}
+
 /* Адаптивность */
 @media (max-width: 480px) {
   .converter-container {
@@ -80,5 +91,4 @@
   .rgb-output {
     font-size: 14px;
   }
-}
 }
